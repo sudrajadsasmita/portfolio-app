@@ -1,5 +1,3 @@
-import type { LucideIcon } from "lucide-react";
-
 export type NavItem = {
   label: string;
   href: string;
@@ -14,14 +12,14 @@ export type Social = {
 export type AboutItem = {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon?: string | null;
 };
 
 export type SkillCategory = {
   title: string;
   description: string;
   items: string[];
-  icon: LucideIcon;
+  icon?: string | null;
 };
 
 export type Project = {
@@ -54,6 +52,47 @@ export type Repository = {
   stars: number;
   forks: number;
   href: string;
+};
+
+export type LandingProfile = {
+  name: string;
+  role: string;
+  availability: string;
+  headline: string;
+  description: string;
+  email: string;
+  siteUrl: string;
+  cvUrl: string;
+  location: string;
+  avatarUrl?: string | null;
+};
+
+export type LandingSiteSettings = {
+  siteName: string;
+  title: string;
+  description: string;
+  ogImageUrl?: string | null;
+  twitterCard: "summary" | "summary_large_image" | string;
+  faviconUrl?: string | null;
+  contactCtaTitle: string;
+  contactCtaDescription: string;
+};
+
+export type HeroSnippet = {
+  filename: string;
+  code: string;
+};
+
+export type LandingContent = {
+  profile: LandingProfile;
+  siteSettings: LandingSiteSettings;
+  heroSnippet: HeroSnippet;
+  navItems: NavItem[];
+  aboutItems: AboutItem[];
+  skillCategories: SkillCategory[];
+  projects: Project[];
+  experiences: Experience[];
+  socials: Social[];
 };
 
 export type ProjectQuery = {

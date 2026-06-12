@@ -2,12 +2,28 @@
 
 import { Download, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { navItems, profile } from "@/data/profile";
 import { Button } from "@/components/ui/button-custom";
 import { cn } from "@/lib/utils";
+import type { LandingProfile, NavItem } from "@/types";
 
-export function Navbar() {
+type NavbarProps = {
+  navItems: NavItem[];
+  profile: LandingProfile;
+};
+
+function getInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((item) => item[0])
+    .join("")
+    .toUpperCase();
+}
+
+export function Navbar({ navItems, profile }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  const initials = getInitials(profile.name) || "SD";
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#020617]/75 backdrop-blur-xl">
@@ -17,7 +33,7 @@ export function Navbar() {
           className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-cyan-400"
         >
           <span className="flex size-9 items-center justify-center rounded-2xl border border-cyan-400/30 bg-cyan-400/10 font-mono text-sm font-bold text-cyan-300">
-            SD
+            {initials}
           </span>
           <span className="text-sm font-semibold text-slate-100 sm:text-base">
             {profile.name}

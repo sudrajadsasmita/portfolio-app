@@ -1,0 +1,52 @@
+import type { ProfileForm } from "@/validations/profile-validation";
+import type { ProfileFormState } from "@/types/profile";
+
+export const INITIAL_PROFILE_FORM: ProfileForm = {
+  name: "",
+  title: "",
+  headline: "",
+  bio: "",
+  avatar_url: "",
+  resume_url: "",
+  location: "",
+  email: "",
+  phone: "",
+  availability: "",
+  github: "",
+  linkedin: "",
+  website: "",
+  instagram: "",
+  twitter: "",
+  facebook: "",
+  youtube: "",
+  gitlab: "",
+  medium: "",
+  devto: "",
+};
+
+export const INITIAL_STATE_PROFILE_FORM: ProfileFormState = {
+  status: "idle",
+  errors: {
+    name: [],
+    title: [],
+    headline: [],
+    bio: [],
+    avatar_url: [],
+    resume_url: [],
+    location: [],
+    email: [],
+    phone: [],
+    availability: [],
+    github: [],
+    linkedin: [],
+    website: [],
+    instagram: [],
+    twitter: [],
+    facebook: [],
+    youtube: [],
+    gitlab: [],
+    medium: [],
+    devto: [],
+    _form: [],
+  },
+};

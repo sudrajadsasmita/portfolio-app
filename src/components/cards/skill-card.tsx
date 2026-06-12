@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  Bot,
+  Boxes,
+  BrainCircuit,
+  CloudCog,
+  Code2,
+  Database,
+  LayoutDashboard,
+  ServerCog,
+  type LucideIcon,
+} from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { AboutItem, SkillCategory } from "@/types";
 import { cn } from "@/lib/utils";
@@ -9,8 +20,19 @@ type SkillCardProps = {
   compact?: boolean;
 };
 
+const iconMap: Record<string, LucideIcon> = {
+  Bot,
+  Boxes,
+  BrainCircuit,
+  CloudCog,
+  Code2,
+  Database,
+  LayoutDashboard,
+  ServerCog,
+};
+
 export function SkillCard({ item, compact = false }: SkillCardProps) {
-  const Icon = item.icon;
+  const Icon = item.icon ? iconMap[item.icon] || Code2 : Code2;
   const reduceMotion = useReducedMotion();
   const hasItems = "items" in item;
 

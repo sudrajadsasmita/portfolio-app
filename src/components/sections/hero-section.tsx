@@ -2,12 +2,17 @@
 
 import { ArrowRight, Download, Mail, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { profile, terminalSnippet } from "@/data/profile";
 import { Button } from "@/components/ui/button-custom";
+import type { HeroSnippet, LandingProfile } from "@/types";
 
-export function HeroSection() {
+type HeroSectionProps = {
+  profile: LandingProfile;
+  snippet: HeroSnippet;
+};
+
+export function HeroSection({ profile, snippet }: HeroSectionProps) {
   const reduceMotion = useReducedMotion();
-  const codeLines = terminalSnippet.split("\n");
+  const codeLines = snippet.code.split("\n");
 
   return (
     <section id="home" className="relative overflow-hidden bg-[#020617]">
@@ -63,7 +68,7 @@ export function HeroSection() {
                 aria-hidden="true"
                 className="size-3.5 text-cyan-300 min-[430px]:size-4"
               />
-              developer.ts
+              {snippet.filename}
             </div>
           </div>
           <pre className="overflow-x-auto py-3 font-mono text-[0.68rem] leading-5 text-slate-300 min-[430px]:py-4 min-[430px]:text-xs min-[430px]:leading-6 sm:py-6 sm:text-sm sm:leading-7">

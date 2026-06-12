@@ -3,8 +3,7 @@
 import { BriefcaseBusiness, Code2, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button-custom";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { profile } from "@/data/profile";
-import { socials } from "@/data/socials";
+import type { LandingProfile, LandingSiteSettings, Social } from "@/types";
 
 const icons = {
   Github: Code2,
@@ -13,14 +12,24 @@ const icons = {
   MessageCircle,
 };
 
-export function ContactSection() {
+type ContactSectionProps = {
+  profile: LandingProfile;
+  siteSettings: LandingSiteSettings;
+  socials: Social[];
+};
+
+export function ContactSection({
+  profile,
+  siteSettings,
+  socials,
+}: ContactSectionProps) {
   return (
     <section id="contact" className="bg-[#0F172A]  px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <SectionHeading
           eyebrow="Contact"
-          title="Interested in working together?"
-          description="Let's build something useful, scalable, and production-ready."
+          title={siteSettings.contactCtaTitle}
+          description={siteSettings.contactCtaDescription}
         />
         <div className="mt-12 rounded-2xl border border-slate-800 bg-[#111827]/90 p-6 shadow-2xl shadow-slate-950/30 md:p-8">
           <div className="grid gap-6 md:grid-cols-[1fr_0.8fr] md:items-center">

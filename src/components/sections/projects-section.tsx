@@ -1,8 +1,12 @@
 import { ProjectCard } from "@/components/cards/project-card";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { projects } from "@/data/projects";
+import type { Project } from "@/types";
 
-export function ProjectsSection() {
+type ProjectsSectionProps = {
+  projects: Project[];
+};
+
+export function ProjectsSection({ projects }: ProjectsSectionProps) {
   return (
     <section id="projects" className="bg-[#0F172A] px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">

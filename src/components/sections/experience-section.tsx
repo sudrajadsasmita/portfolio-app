@@ -2,9 +2,13 @@
 
 import { ExperienceCard } from "@/components/cards/experience-card";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { experiences } from "@/data/experience";
+import type { Experience } from "@/types";
 
-export function ExperienceSection() {
+type ExperienceSectionProps = {
+  experiences: Experience[];
+};
+
+export function ExperienceSection({ experiences }: ExperienceSectionProps) {
   return (
     <section id="experience" className="bg-[#020617] px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">

@@ -39,12 +39,12 @@ export default function Login() {
     });
 
     startTransition(() => {
-      loginAction(null);
+      loginAction(formData);
     });
   });
 
   useEffect(() => {
-    if (loginState.status === "error") {
+    if (loginState.status == "error") {
       toast.error("Login failed", {
         description: loginState.errors?._form?.[0],
       });
@@ -53,7 +53,8 @@ export default function Login() {
         loginAction(null);
       });
     }
-  }, []);
+    console.log(loginState.status === "error");
+  }, [loginState]);
 
   return (
     <Card>

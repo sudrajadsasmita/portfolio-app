@@ -1,5 +1,5 @@
 import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { Field, FieldError, FieldLabel, FieldSet } from "../ui/field";
+import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 

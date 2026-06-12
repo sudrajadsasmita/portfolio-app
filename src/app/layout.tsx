@@ -3,6 +3,8 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import ReactQueryProvider from "@/providers/react-query-provider";
+import { Toaster } from "sonner";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -43,13 +45,21 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={cn(
-        "dark scroll-smooth font-sans",
+        "scroll-smooth font-sans",
         geist.variable,
         geistMono.variable,
       )}
     >
-      <body className="min-h-svh bg-[#020617] text-slate-100 antialiased">
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+      <body className="min-h-svh bg-background text-foreground antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

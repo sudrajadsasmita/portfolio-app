@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portofolio App
 
-## Getting Started
+Modern portfolio website built with Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, and Framer Motion.
 
-First, run the development server:
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Docker Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Prepare the environment file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cp .env.example .env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Update `.env` with the production domain and required Supabase values, then run:
 
-## Deploy on Vercel
+```bash
+docker compose up -d --build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app is exposed on port `3000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Useful commands:
+
+```bash
+docker compose ps
+docker compose logs -f portfolio-app
+docker compose down
+```
+
+For Nginx or Caddy, reverse proxy your domain to:
+
+```txt
+http://127.0.0.1:3000
+```
+
+Set `NEXT_PUBLIC_SITE_URL` to your production URL, for example:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
+
+## Docker Files
+
+- `Dockerfile` uses a multi-stage Node 24 Alpine build with Next.js standalone output.
+- `docker-compose.yml` builds and runs the app with restart policy and healthcheck.
+- `.dockerignore` keeps local dependencies, build output, logs, and local env files out of the image context.

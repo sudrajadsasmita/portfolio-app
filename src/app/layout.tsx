@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Sudraja DDS - Fullstack Developer",
+    title: "SudrajadDS - Fullstack Developer",
     description:
       "Portfolio for a Fullstack Developer focused on Next.js, backend systems, PostgreSQL, AI apps, and self-hosted deployments.",
     url: siteUrl,

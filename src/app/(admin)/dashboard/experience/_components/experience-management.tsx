@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -73,20 +73,20 @@ export default function ExperienceManagement() {
     type: "create" | "update" | "delete";
   } | null>(null);
 
-  const handleChangeAction = (open: boolean) => {
+  const handleChangeAction = useCallback((open: boolean) => {
     if (!open) {
       setSelectedAction(null);
     }
-  };
+  }, []);
 
-  const openAction = (
+  const openAction = useCallback((
     data: PortfolioExperienceRow,
     type: "update" | "delete",
   ) => {
     window.setTimeout(() => {
       setSelectedAction({ data, type });
     }, 0);
-  };
+  }, []);
 
   const filteredData = useMemo(() => {
     return ((experiences?.data || []) as PortfolioExperienceRow[]).map(
@@ -159,7 +159,7 @@ export default function ExperienceManagement() {
         ];
       },
     );
-  }, [currentLimit, currentPage, experiences?.data]);
+  }, [currentLimit, currentPage, experiences?.data, openAction]);
 
   const totalPages = useMemo(() => {
     return experiences && experiences.count !== null

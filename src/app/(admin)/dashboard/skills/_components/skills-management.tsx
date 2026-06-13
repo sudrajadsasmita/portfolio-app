@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -67,20 +67,20 @@ export default function SkillsManagement() {
     type: "create" | "update" | "delete";
   } | null>(null);
 
-  const handleChangeAction = (open: boolean) => {
+  const handleChangeAction = useCallback((open: boolean) => {
     if (!open) {
       setSelectedAction(null);
     }
-  };
+  }, []);
 
-  const openAction = (
+  const openAction = useCallback((
     data: PortfolioSkillRow,
     type: "update" | "delete",
   ) => {
     window.setTimeout(() => {
       setSelectedAction({ data, type });
     }, 0);
-  };
+  }, []);
 
   const filteredData = useMemo(() => {
     return ((skills?.data || []) as PortfolioSkillRow[]).map((skill, index) => [
@@ -134,7 +134,7 @@ export default function SkillsManagement() {
         ]}
       />,
     ]);
-  }, [currentLimit, currentPage, skills?.data]);
+  }, [currentLimit, currentPage, openAction, skills?.data]);
 
   const totalPages = useMemo(() => {
     return skills && skills.count !== null

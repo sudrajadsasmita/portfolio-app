@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -66,20 +66,20 @@ export default function AboutItemsManagement() {
     type: "create" | "update" | "delete";
   } | null>(null);
 
-  const handleChangeAction = (open: boolean) => {
+  const handleChangeAction = useCallback((open: boolean) => {
     if (!open) {
       setSelectedAction(null);
     }
-  };
+  }, []);
 
-  const openAction = (
+  const openAction = useCallback((
     data: PortfolioAboutItemRow,
     type: "update" | "delete",
   ) => {
     window.setTimeout(() => {
       setSelectedAction({ data, type });
     }, 0);
-  };
+  }, []);
 
   const filteredData = useMemo(() => {
     return ((aboutItems?.data || []) as PortfolioAboutItemRow[]).map(
@@ -130,7 +130,7 @@ export default function AboutItemsManagement() {
         />,
       ],
     );
-  }, [aboutItems?.data, currentLimit, currentPage]);
+  }, [aboutItems?.data, currentLimit, currentPage, openAction]);
 
   const totalPages = useMemo(() => {
     return aboutItems && aboutItems.count !== null

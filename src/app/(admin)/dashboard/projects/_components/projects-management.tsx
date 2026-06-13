@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -73,11 +73,20 @@ export default function ProjectsManagement() {
     type: "create" | "update" | "delete";
   } | null>(null);
 
-  const handleChangeAction = (open: boolean) => {
+  const handleChangeAction = useCallback((open: boolean) => {
     if (!open) {
       setSelectedAction(null);
     }
-  };
+  }, []);
+
+  const openAction = useCallback((
+    data: PortfolioProjectRow,
+    type: "update" | "delete",
+  ) => {
+    window.setTimeout(() => {
+      setSelectedAction({ data, type });
+    }, 0);
+  }, []);
 
   const filteredData = useMemo(() => {
     return ((projects?.data || []) as PortfolioProjectRow[]).map((project, index) => {
@@ -138,7 +147,7 @@ export default function ProjectsManagement() {
                   Edit
                 </span>
               ),
-              action: () => setSelectedAction({ data: project, type: "update" }),
+              action: () => openAction(project, "update"),
             },
             {
               label: (
@@ -148,13 +157,13 @@ export default function ProjectsManagement() {
                 </span>
               ),
               variant: "destructive",
-              action: () => setSelectedAction({ data: project, type: "delete" }),
+              action: () => openAction(project, "delete"),
             },
           ]}
         />,
       ];
     });
-  }, [currentLimit, currentPage, projects?.data]);
+  }, [currentLimit, currentPage, openAction, projects?.data]);
 
   const totalPages = useMemo(() => {
     return projects && projects.count !== null

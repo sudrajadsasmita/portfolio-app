@@ -2,7 +2,10 @@ import { cache } from "react";
 import { environment } from "@/configs/environment";
 import { experiences as fallbackExperiences } from "@/data/experience";
 import { navItems, profile as fallbackProfile, terminalSnippet } from "@/data/profile";
-import { projects as fallbackProjects } from "@/data/projects";
+import {
+  projects as fallbackProjects,
+  repositories as fallbackRepositories,
+} from "@/data/projects";
 import { aboutItems as fallbackAboutItems, skillCategories } from "@/data/skills";
 import { socials as fallbackSocials } from "@/data/socials";
 import { createClient } from "@/lib/supabase/server";
@@ -14,6 +17,7 @@ import type {
   LandingProfile,
   LandingSiteSettings,
   Project,
+  Repository,
   SkillCategory,
   Social,
 } from "@/types";
@@ -49,6 +53,19 @@ type PortfolioSocialLinkRow = {
   sort_order: number;
 };
 
+type PortfolioRepositoryRow = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  stars: number;
+  forks: number;
+  language: string | null;
+  is_pinned: boolean;
+  sort_order: number;
+  portfolio_repository_stacks?: { id: string; name: string; sort_order: number }[];
+};
+
 const defaultSiteSettings: LandingSiteSettings = {
   siteName: fallbackProfile.name,
   title: `${fallbackProfile.name} - ${fallbackProfile.role}`,
@@ -80,6 +97,7 @@ function fallbackContent(): LandingContent {
     skillCategories,
     projects: fallbackProjects,
     experiences: fallbackExperiences,
+    repositories: fallbackRepositories,
     socials: fallbackSocials,
   };
 }
@@ -144,7 +162,7 @@ function mapHeroSnippet(row: PortfolioHeroSnippetRow | null): HeroSnippet {
 }
 
 function mapAboutItems(rows: PortfolioAboutItemRow[] | null): AboutItem[] {
-  if (!rows?.length) {
+  if (!rows) {
     return fallbackAboutItems;
   }
 
@@ -162,7 +180,7 @@ function getCategoryDefaults(category: string) {
 }
 
 function mapSkills(rows: PortfolioSkillRow[] | null): SkillCategory[] {
-  if (!rows?.length) {
+  if (!rows) {
     return skillCategories;
   }
 
@@ -195,7 +213,7 @@ function mapSkills(rows: PortfolioSkillRow[] | null): SkillCategory[] {
 }
 
 function mapProjects(rows: PortfolioProjectRow[] | null): Project[] {
-  if (!rows?.length) {
+  if (!rows) {
     return fallbackProjects;
   }
 
@@ -222,7 +240,7 @@ function mapProjects(rows: PortfolioProjectRow[] | null): Project[] {
 }
 
 function mapExperiences(rows: PortfolioExperienceRow[] | null): Experience[] {
-  if (!rows?.length) {
+  if (!rows) {
     return fallbackExperiences;
   }
 
@@ -239,6 +257,30 @@ function mapExperiences(rows: PortfolioExperienceRow[] | null): Experience[] {
         ?.sort(bySortOrder)
         .map((item) => item.highlight) ?? [],
   }));
+}
+
+function mapRepositories(rows: PortfolioRepositoryRow[] | null): Repository[] {
+  if (!rows) {
+    return fallbackRepositories;
+  }
+
+  return rows
+    .sort(
+      (a, b) =>
+        Number(b.is_pinned) - Number(a.is_pinned) || a.sort_order - b.sort_order,
+    )
+    .map((repository) => ({
+      name: repository.name,
+      description: repository.description,
+      stack:
+        repository.portfolio_repository_stacks
+          ?.sort(bySortOrder)
+          .map((item) => item.name) ??
+        (repository.language ? [repository.language] : []),
+      stars: repository.stars,
+      forks: repository.forks,
+      href: repository.url,
+    }));
 }
 
 function normalizeSocialIcon(icon: string | null, platform: string): Social["icon"] {
@@ -311,6 +353,10 @@ function mapSocials(
     ];
   }
 
+  if (rows) {
+    return [];
+  }
+
   return fallbackSocials;
 }
 
@@ -328,6 +374,7 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
     skillsResult,
     projectsResult,
     experiencesResult,
+    repositoriesResult,
     socialsResult,
   ] = await Promise.all([
     supabase
@@ -384,6 +431,17 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
       .eq("is_active", true)
       .order("sort_order", { ascending: true }),
     supabase
+      .from("portfolio_repositories")
+      .select(
+        `
+          *,
+          portfolio_repository_stacks(id, name, sort_order)
+        `,
+      )
+      .eq("is_active", true)
+      .order("is_pinned", { ascending: false })
+      .order("sort_order", { ascending: true }),
+    supabase
       .from("portfolio_social_links")
       .select("label, platform, url, icon, sort_order")
       .eq("is_active", true)
@@ -423,6 +481,11 @@ export const getLandingContent = cache(async (): Promise<LandingContent> => {
       experiencesResult.error
         ? null
         : (experiencesResult.data as PortfolioExperienceRow[]),
+    ),
+    repositories: mapRepositories(
+      repositoriesResult.error
+        ? null
+        : (repositoriesResult.data as PortfolioRepositoryRow[]),
     ),
     socials: mapSocials(
       socialsResult.error

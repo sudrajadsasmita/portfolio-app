@@ -92,6 +92,7 @@ export type LandingContent = {
   skillCategories: SkillCategory[];
   projects: Project[];
   experiences: Experience[];
+  repositories: Repository[];
   socials: Social[];
 };
 

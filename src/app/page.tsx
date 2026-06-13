@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { AboutSection } from "@/components/sections/about-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { ExperienceSection } from "@/components/sections/experience-section";
+import { GithubSection } from "@/components/sections/github-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
 import { TechStackSection } from "@/components/sections/tech-stack-section";
@@ -48,6 +49,7 @@ export default async function Home() {
     skillCategories,
     projects,
     experiences,
+    repositories,
     socials,
   } = await getLandingContent();
 
@@ -60,7 +62,7 @@ export default async function Home() {
         <TechStackSection categories={skillCategories} />
         <ProjectsSection projects={projects} />
         <ExperienceSection experiences={experiences} />
-        {/* <GithubSection /> */}
+        <GithubSection repositories={repositories} />
         <ContactSection
           profile={profile}
           siteSettings={siteSettings}

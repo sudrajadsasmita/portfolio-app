@@ -32,10 +32,9 @@ export async function login(
 
   const supabase = await createClient();
 
-  const {
-    error,
-    data: { user },
-  } = await supabase.auth.signInWithPassword(validationFields.data);
+  const { error } = await supabase.auth.signInWithPassword(
+    validationFields.data,
+  );
 
   if (error) {
     return {

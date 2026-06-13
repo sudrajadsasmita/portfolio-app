@@ -56,6 +56,6 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 
 ## Docker Files
 
-- `Dockerfile` uses a multi-stage Node 24 Alpine build with Next.js standalone output.
+- `Dockerfile` uses a multi-stage Node 24 Alpine build and runs the production app with `next start`.
 - `docker-compose.yml` builds and runs the app with restart policy and healthcheck.
 - `.dockerignore` keeps local dependencies, build output, logs, and local env files out of the image context.
